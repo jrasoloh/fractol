@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrasoloh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/16 11:31:01 by jrasoloh          #+#    #+#             */
-/*   Updated: 2017/12/16 17:54:46 by jrasoloh         ###   ########.fr       */
+/*   Created: 2017/12/15 14:27:46 by jrasoloh          #+#    #+#             */
+/*   Updated: 2017/12/15 17:05:02 by jrasoloh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fractol.h"
 
-int				main(int argc, char **argv)
+void				ft_put_pixel(t_env *env)
 {
-	t_env		*event;
+	int				res;
+	int				*tab;
 
-	(void) argv[1];
-	if (argc != 2)
-		ft_arg_error(argc);
-	else
+	tab = (int*)env->data;
+	res = env->x + (env->y * WIN_X);
+	if (env->x >= 0 && env->x < WIN_X && env->y >= 0 && env->y < WIN_Y)
 	{
-		event = (t_env *)malloc(sizeof(t_env));	
-		ft_mlx(event);
+		tab[res] = 0x001E90FF;
 	}
-	return (0);
 }

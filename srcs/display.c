@@ -6,7 +6,7 @@
 /*   By: jrasoloh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:30:47 by jrasoloh          #+#    #+#             */
-/*   Updated: 2017/11/21 16:13:13 by jrasoloh         ###   ########.fr       */
+/*   Updated: 2017/12/16 18:15:27 by jrasoloh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ int					red_cross(t_env *event)
 int					expose_hook(t_env *event)
 {
 	ft_bzero(event->data, WIN_Y * event->sizeline);
-	ft_mandelbrot(event);
-	mlx_put_image_to_window(event->mlx, event->win, event->img_ptr, WIN_X / 2, WIN_Y / 2);
+//	ft_mandelbrot(event);
+	ft_julia(event);
+	mlx_put_image_to_window(event->mlx, event->win, event->img_ptr, 0, 0);
 	mlx_string_put(event->mlx, event->win, WIN_X / 2, 0, 0x00CD853F, "MY_FRACTOL");
 	return (0);
 }
@@ -39,7 +40,10 @@ int					expose_hook(t_env *event)
 static int			ft_key(int keycode, t_env *event)
 {
 	if (keycode == T_EXIT)
+	{
+		free(event);
 		exit(0);
+	}
 	if (keycode == ZOOM_IN && event->zoom > -1 && event->zoom <= 100)
 		event->zoom += 5;
 	if (keycode == ZOOM_OUT && event->zoom > 4 && event->zoom < 106)
@@ -54,6 +58,8 @@ void				ft_mlx(t_env *event)
 	event->bpp = 0;
 	event->sizeline = 0;
 	event->endian = 0;
+	event->x = 0;
+	event->y = 0;
 	event->data = NULL;
 	event->color = ft_color(255, 255, 255);
 	event->mlx = mlx_init();
