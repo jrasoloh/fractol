@@ -6,7 +6,7 @@
 /*   By: jrasoloh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:30:47 by jrasoloh          #+#    #+#             */
-/*   Updated: 2017/12/16 18:15:27 by jrasoloh         ###   ########.fr       */
+/*   Updated: 2017/12/18 17:02:28 by jrasoloh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,72 @@ static int			ft_color(int r, int g, int b)
 	return (color);
 }
 
+void				key_exit(int keycode, t_env *e)
+{
+	if (keycode == T_EXIT)
+	{
+		free(e);
+		exit(0);
+	}
+}
+
+void				zoom_in(t_env *e)
+{
+	e->x += WIN_X / 12;
+	e->y += WIN_Y / 12;
+	e->x = e->x * 1.2;
+	e->y = e->y * 1.2;
+}
+
+void				zoom_out(t_env *e)
+{
+	e->x -= WIN_X / 12;
+	e->y -= WIN_Y / 12;
+	e->x = e->x / 1.2;
+	e->y = e->y / 1.2;
+}
+
+void				key_move(int k, t_env *e)
+{
+	if (k == KEY_UP)
+		e->y += 10;
+	if (k == KEY_DOWN)
+		e->y -= 10;
+	if (k == KEY_RIGHT)
+		e->x += 10;
+	if (k == KEY_DOWN)
+		e->x -= 10;
+}
+
+void				key_zoom(int k, t_env *e)
+{
+	if (k == ZOOM_IN)
+		zoom_in(e);
+	if (k == ZOOM_OUT)
+		zoom_out(e);
+}
+
 int					red_cross(t_env *event)
 {
 	ft_memdel((void**)&event);
 	exit(0);
 }
 
-int					expose_hook(t_env *event)
+int					expose_hook(t_env *e)
 {
-	ft_bzero(event->data, WIN_Y * event->sizeline);
-//	ft_mandelbrot(event);
-	ft_julia(event);
-	mlx_put_image_to_window(event->mlx, event->win, event->img_ptr, 0, 0);
-	mlx_string_put(event->mlx, event->win, WIN_X / 2, 0, 0x00CD853F, "MY_FRACTOL");
+	ft_bzero(e->data, WIN_Y * e->sizeline);
+	ft_mandelbrot(e);
+//	ft_julia(e);
+	mlx_put_image_to_window(e->mlx, e->win, e->img_ptr, 0, 0);
+	mlx_string_put(e->mlx, e->win, WIN_X / 2, 0, 0x00CD853F, "MY_FRACTOL");
 	return (0);
 }
 
 static int			ft_key(int keycode, t_env *event)
 {
-	if (keycode == T_EXIT)
-	{
-		free(event);
-		exit(0);
-	}
-	if (keycode == ZOOM_IN && event->zoom > -1 && event->zoom <= 100)
-		event->zoom += 5;
-	if (keycode == ZOOM_OUT && event->zoom > 4 && event->zoom < 106)
-		event->zoom -= 5;
+	key_exit(keycode, event);
+	key_move(keycode, event);
+	key_zoom(keycode, event);
 	expose_hook(event);
 	return (0);
 }
