@@ -6,7 +6,7 @@
 /*   By: jrasoloh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/16 17:44:16 by jrasoloh          #+#    #+#             */
-/*   Updated: 2017/12/16 18:21:52 by jrasoloh         ###   ########.fr       */
+/*   Updated: 2017/12/29 14:37:21 by jrasoloh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static void			ft_init(t_env *env, t_num_comp *c, t_num_comp *z)
 	zoom = 500;
 	c->r = 0.285;
 	c->i = 0.01;
-	z->r = (long double)env->x / zoom + X_J;
-	z->i = (long double)env->y / zoom + Y;
+	z->r = (long double)env->x / env->zoom_j + env->p2_j->x;
+	z->i = (long double)env->y / env->zoom_j + env->p2_j->y;
 }
 
 static int			ft_unity(t_num_comp *c, t_num_comp *z)

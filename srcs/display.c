@@ -6,7 +6,7 @@
 /*   By: jrasoloh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:30:47 by jrasoloh          #+#    #+#             */
-/*   Updated: 2017/12/18 17:02:28 by jrasoloh         ###   ########.fr       */
+/*   Updated: 2017/12/29 14:39:55 by jrasoloh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,16 @@ void				key_exit(int keycode, t_env *e)
 
 void				zoom_in(t_env *e)
 {
-	e->x += WIN_X / 12;
-	e->y += WIN_Y / 12;
+//	e->x += WIN_X / 2;
+//	e->y += WIN_Y / 2;
 	e->x = e->x * 1.2;
 	e->y = e->y * 1.2;
 }
 
 void				zoom_out(t_env *e)
 {
-	e->x -= WIN_X / 12;
-	e->y -= WIN_Y / 12;
+//	e->x -= WIN_X;
+//	e->y -= WIN_Y / 2;
 	e->x = e->x / 1.2;
 	e->y = e->y / 1.2;
 }
@@ -74,7 +74,9 @@ int					red_cross(t_env *event)
 
 int					expose_hook(t_env *e)
 {
+	mlx_destroy_image(e->mlx, e->img_ptr);
 	ft_bzero(e->data, WIN_Y * e->sizeline);
+	e->img_ptr = mlx_new_image(e->mlx, WIN_X, WIN_Y);
 	ft_mandelbrot(e);
 //	ft_julia(e);
 	mlx_put_image_to_window(e->mlx, e->win, e->img_ptr, 0, 0);
@@ -94,6 +96,7 @@ static int			ft_key(int keycode, t_env *event)
 void				ft_mlx(t_env *event)
 {
 	event->zoom = 5;
+	event->zoom_j = 500;
 	event->bpp = 0;
 	event->sizeline = 0;
 	event->endian = 0;
@@ -101,6 +104,27 @@ void				ft_mlx(t_env *event)
 	event->y = 0;
 	event->data = NULL;
 	event->color = ft_color(255, 255, 255);
+	if (!(event->p1 = (t_point *)malloc(sizeof(t_point))))
+		return ;
+	else
+	{
+		event->p1->x = -2.1;
+		event->p1->y = -1.2;
+	}
+	if (!(event->p2 = (t_point *)malloc(sizeof(t_point))))
+		return ;
+	else
+	{
+		event->p2->x = 0.6;
+		event->p2->y = 1.2;
+	}
+	if (!(event->p2_j = (t_point *)malloc(sizeof(t_point))))
+		return ;
+	else
+	{
+		event->p2_j->x = -1;
+		event->p2_j->y = -1.2;
+	}
 	event->mlx = mlx_init();
 	event->win = mlx_new_window(event->mlx, WIN_X, WIN_Y, "mlx 42");
 	if (!(event->img_ptr = mlx_new_image(event->mlx, WIN_X, WIN_Y)))
