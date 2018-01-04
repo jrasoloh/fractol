@@ -6,7 +6,7 @@
 /*   By: jrasoloh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:30:47 by jrasoloh          #+#    #+#             */
-/*   Updated: 2017/12/29 14:39:55 by jrasoloh         ###   ########.fr       */
+/*   Updated: 2018/01/04 18:54:11 by jrasoloh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,48 +30,6 @@ void				key_exit(int keycode, t_env *e)
 	}
 }
 
-void				zoom_in(t_env *e)
-{
-//	e->x += WIN_X / 2;
-//	e->y += WIN_Y / 2;
-	e->x = e->x * 1.2;
-	e->y = e->y * 1.2;
-}
-
-void				zoom_out(t_env *e)
-{
-//	e->x -= WIN_X;
-//	e->y -= WIN_Y / 2;
-	e->x = e->x / 1.2;
-	e->y = e->y / 1.2;
-}
-
-void				key_move(int k, t_env *e)
-{
-	if (k == KEY_UP)
-		e->y += 10;
-	if (k == KEY_DOWN)
-		e->y -= 10;
-	if (k == KEY_RIGHT)
-		e->x += 10;
-	if (k == KEY_DOWN)
-		e->x -= 10;
-}
-
-void				key_zoom(int k, t_env *e)
-{
-	if (k == ZOOM_IN)
-		zoom_in(e);
-	if (k == ZOOM_OUT)
-		zoom_out(e);
-}
-
-int					red_cross(t_env *event)
-{
-	ft_memdel((void**)&event);
-	exit(0);
-}
-
 int					expose_hook(t_env *e)
 {
 	mlx_destroy_image(e->mlx, e->img_ptr);
@@ -84,12 +42,13 @@ int					expose_hook(t_env *e)
 	return (0);
 }
 
-static int			ft_key(int keycode, t_env *event)
+static int			ft_key(int k, t_env *e)
 {
-	key_exit(keycode, event);
-	key_move(keycode, event);
-	key_zoom(keycode, event);
-	expose_hook(event);
+	printf("keycode = %d/ x = %f; y = %f \n", k, e->mvt->x, e->mvt->y);
+	key_exit(k, e);
+	key_move(k, e);
+	key_zoom(k, e);
+	expose_hook(e);
 	return (0);
 }
 
@@ -100,10 +59,15 @@ void				ft_mlx(t_env *event)
 	event->bpp = 0;
 	event->sizeline = 0;
 	event->endian = 0;
-	event->x = 0;
-	event->y = 0;
 	event->data = NULL;
 	event->color = ft_color(255, 255, 255);
+	if (!(event->mvt = (t_point *)malloc(sizeof(t_point))))
+		return ;
+	else
+	{
+		event->mvt->x = 0;
+		event->mvt->y = 0;
+	}
 	if (!(event->p1 = (t_point *)malloc(sizeof(t_point))))
 		return ;
 	else

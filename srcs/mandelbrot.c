@@ -6,7 +6,7 @@
 /*   By: jrasoloh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 14:37:34 by jrasoloh          #+#    #+#             */
-/*   Updated: 2017/12/29 14:50:04 by jrasoloh         ###   ########.fr       */
+/*   Updated: 2018/01/04 19:05:04 by jrasoloh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ void				ft_mandelbrot(t_env *event)
 	t_num_comp		*z;
 	t_num_comp		*c;
 
+	event->x = event->mvt->x;
+	event->y = event->mvt->y;
+	printf("coordonnees de depart x = %f et y = %f\n", event->x, event->y);
 	c = (t_num_comp *)malloc(sizeof(t_num_comp));
 	z = (t_num_comp *)malloc(sizeof(t_num_comp));
 	ft_init(event, c, z);
@@ -60,8 +63,9 @@ void				ft_mandelbrot(t_env *event)
 			(event->y)++;
 		}
 		(event->x)++;
-		event->y = 0;
+		event->y = event->mvt->y;
 	}
+	printf("coordonnees de fin x = %f et y = %f\n", event->x, event->y);
 	free(c);
 	free(z);
 }
