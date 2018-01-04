@@ -6,7 +6,7 @@
 /*   By: jrasoloh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 14:37:34 by jrasoloh          #+#    #+#             */
-/*   Updated: 2018/01/04 19:05:04 by jrasoloh         ###   ########.fr       */
+/*   Updated: 2018/01/04 20:31:30 by jrasoloh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,19 @@ void				ft_mandelbrot(t_env *event)
 	c = (t_num_comp *)malloc(sizeof(t_num_comp));
 	z = (t_num_comp *)malloc(sizeof(t_num_comp));
 	ft_init(event, c, z);
-	while (event->x < WIN_X)
+	while (event->x < (WIN_X + event->mvt->x))
 	{
-		while (event->y < WIN_Y)
+		while (event->y < (WIN_Y + event->mvt->y))
 		{
 			ft_init(event, c, z);
 			event->i = ft_unity(c, z);
 			 if (event->i == I_MAX)
+			 {
+				event->data[(int)event->y * event->sizeline + (int)event->x * event->bpp / 8] = 0x0;
+				event->data[(int)event->y * event->sizeline + (int)event->x * event->bpp / 8 + 1] = 0x0;
+				event->data[(int)event->y * event->sizeline + (int)event->x * event->bpp / 8 + 2] = 0x0;
+			 }
+			 else
 				ft_put_pixel(event);
 			(event->y)++;
 		}
